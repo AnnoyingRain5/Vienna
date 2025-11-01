@@ -29,6 +29,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.attribute.BasicFileAttributes;
+import java.util.Locale;
 
 public class Main
 {
@@ -109,6 +110,23 @@ public class Main
 				throw new ServerErrorException(exception);
 			}
 			return Response.ok(data, "application/zip").header("Content-Length", Integer.toString(data.length));
+		});
+
+
+		application.router.addHandler(new Router.Route.Builder(Request.Method.GET, "/tile/16/$x/$filename").build(), request ->
+		{
+			byte[] data;
+			String x = request.getParameter("x").toLowerCase(Locale.ROOT);
+			String filename = request.getParameter("filename").toLowerCase(Locale.ROOT);
+			try (FileInputStream fileInputStream = new FileInputStream(new File("tiles/" + x + "/" + filename)))
+			{
+				data = fileInputStream.readAllBytes();
+			}
+			catch (IOException exception)
+			{
+				return Response.notFound();
+			}
+			return Response.ok(data, "image/png").header("Content-Length", Integer.toString(data.length));
 		});
 
 		return application;
