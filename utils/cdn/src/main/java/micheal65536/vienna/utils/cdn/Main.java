@@ -118,7 +118,7 @@ public class Main
 			byte[] data;
 			String x = request.getParameter("x").toLowerCase(Locale.ROOT);
 			String filename = request.getParameter("filename").toLowerCase(Locale.ROOT);
-			try (FileInputStream fileInputStream = new FileInputStream(new File("tiles/" + x + "/" + filename)))
+			try (FileInputStream fileInputStream = new FileInputStream(new File("/tiles/" + x + "/" + filename)))
 			{
 				data = fileInputStream.readAllBytes();
 			}
